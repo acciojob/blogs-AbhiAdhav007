@@ -5,7 +5,6 @@ import com.driver.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -16,32 +15,44 @@ public class ImageService {
     @Autowired
     ImageRepository imageRepository2;
 
-    public Image addImage(Integer blogId, String description, String dimension){
+    public Image addImage(Integer blogId, String description, String dimensions){
         //add an image to the blog
 
+        Blog originalBlog=blogRepository2.findById(blogId).get();
 
-        Blog blog = blogRepository2.findById(blogId).get();
+        Image newImage=new Image();
+        newImage.setDescription(description);
+        newImage.setDimension(description);
 
 
-        Image image = new Image();
-        image.setDescription(description);
-        image.setDimension(dimension);
-        List<Image> currentImage = blog.getImageList();
-        currentImage.add(image);
-        blog.setImageList(currentImage);
+        List<Image>updateImage=originalBlog.getBlogImages();
+        updateImage.add(newImage);
+        originalBlog.setBlogImages(updateImage);
 
-        blogRepository2.save(blog);
+        newImage.setBlog(originalBlog);
+        blogRepository2.save(originalBlog);
 
-        return image;
+        return newImage;
 
     }
 
     public void deleteImage(Integer id){
-        imageRepository2.deleteById(id);
+        Image image=imageRepository2.findById(id).get();
+
+        List<Image>images=image.getBlog().getBlogImages();
+        for(Image image1:images){
+            if(image1.equals(image)){
+                images.remove(image);
+            }
+        }
+
+        imageRepository2.delete(image);
+
     }
 
     public int countImagesInScreen(Integer id, String screenDimensions) {
         //Find the number of images of given dimensions that can fit in a screen having `screenDimensions`
+
 
         Image image=imageRepository2.findById(id).get();
 
@@ -59,7 +70,6 @@ public class ImageService {
         int scrmul=scr1*scr2;
         int imamul=ima1*ima2;
         return scrmul/imamul;
-
 
 
 

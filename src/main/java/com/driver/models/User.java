@@ -5,30 +5,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "user")
+@Table(name = "user_db")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String username;
-
-    private String password;
+    private String userName;
+    private String passWord;
 
     private String firstName;
-
     private String lastName;
 
-    //user is parent for the blog
+    // mapping blog with user
+    // user is parent for blogs
+    // threr remation is one to many why?because user can post multipal blogs;
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<Blog>postedBlogs=new ArrayList<>();
 
-    @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL)
-    private List<Blog> blogList = new ArrayList<>();
+
+
+
+
+
 
 
     public User() {
-
-
     }
 
     public int getId() {
@@ -39,20 +42,20 @@ public class User {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public String getPassword() {
-        return password;
+    public String getPassWord() {
+        return passWord;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPassWord(String passWord) {
+        this.passWord = passWord;
     }
 
     public String getFirstName() {
@@ -71,11 +74,11 @@ public class User {
         this.lastName = lastName;
     }
 
-    public List<Blog> getBlogList() {
-        return blogList;
+    public List<Blog> getPostedBlogs() {
+        return postedBlogs;
     }
 
-    public void setBlogList(List<Blog> blogList) {
-        this.blogList = blogList;
+    public void setPostedBlogs(List<Blog> postedBlogs) {
+        this.postedBlogs = postedBlogs;
     }
 }

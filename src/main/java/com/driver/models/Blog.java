@@ -1,5 +1,6 @@
 package com.driver.models;
 
+
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -8,7 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "blog")
+@Table(name = "blog_db")
 public class Blog {
 
     @Id
@@ -16,25 +17,40 @@ public class Blog {
     private int id;
 
     private String title;
-
     private String content;
+    @CreationTimestamp
+    private Date postedDate;
 
-    @CreationTimestamp //add timestamp the time when created the entry
-    private Date pubDate;
-
-
-    //blog is child for the user
+    // blog is child for user  so i have to join the colum to user with there primary ky
     @ManyToOne
     @JoinColumn
     private User user;
 
-    //bolg is parent class for the image
-    @OneToMany(mappedBy = "blog" , cascade = CascadeType.ALL)
-    private List<Image> imageList = new ArrayList<>();
+    // Blogs is parent for Image because i can post Blog without Image so that why;
+    @OneToMany
+    private List<Image>blogImages=new ArrayList<>();
+
+
+
+
 
     public Blog() {
+    }
 
+    public List<Image> getBlogImages() {
+        return blogImages;
+    }
 
+    public void setBlogImages(List<Image> blogImages) {
+        this.blogImages = blogImages;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public int getId() {
@@ -61,27 +77,11 @@ public class Blog {
         this.content = content;
     }
 
-    public Date getPubDate() {
-        return pubDate;
+    public Date getPostedDate() {
+        return postedDate;
     }
 
-    public void setPubDate(Date pubDate) {
-        this.pubDate = pubDate;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public List<Image> getImageList() {
-        return imageList;
-    }
-
-    public void setImageList(List<Image> imageList) {
-        this.imageList = imageList;
+    public void setPostedDate(Date postedDate) {
+        this.postedDate = postedDate;
     }
 }

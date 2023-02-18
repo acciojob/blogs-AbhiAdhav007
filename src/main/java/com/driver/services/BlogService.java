@@ -23,28 +23,32 @@ public class BlogService {
 
     public Blog createAndReturnBlog(Integer userId, String title, String content) {
         //create a blog at the current time
-        User user = userRepository1.findById(userId).get();
+        User user=userRepository1.findById(userId).get();
 
+        Blog newBlog=new Blog();
+        newBlog.setTitle(title);
+        newBlog.setContent(content);
 
-        Blog blog = new Blog();
-        blog.setContent(content);
-        blog.setTitle(title);
+        // setting forigen key attribute;
 
-        List<Blog> blogList = user.getBlogList();
-        blogList.add(blog);
-        user.setBlogList(blogList);
+        List<Blog>prePostedBlog=user.getPostedBlogs();
+        prePostedBlog.add(newBlog);
+
+        user.setPostedBlogs(prePostedBlog);
+
+        newBlog.setUser(user);
 
         userRepository1.save(user);
-
-        return blog;
-
-
+        return newBlog;
 
     }
 
     public void deleteBlog(int blogId){
         //delete blog and corresponding images
-        blogRepository1.deleteById(blogId);
+
+        Blog blog=blogRepository1.findById(blogId).get();
+
+        blogRepository1.delete(blog);
 
     }
 }
