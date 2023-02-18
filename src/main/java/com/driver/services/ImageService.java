@@ -16,7 +16,7 @@ public class ImageService {
     @Autowired
     ImageRepository imageRepository2;
 
-    public Image addImage(Integer blogId, String description, String dimensions){
+    public Image addImage(Integer blogId, String description, String dimension){
         //add an image to the blog
 
 
@@ -25,7 +25,7 @@ public class ImageService {
 
         Image image = new Image();
         image.setDescription(description);
-        image.setDimensions(dimensions);
+        image.setDimension(dimension);
         List<Image> currentImage = blog.getImageList();
         currentImage.add(image);
         blog.setImageList(currentImage);
@@ -45,7 +45,7 @@ public class ImageService {
 
         Image image=imageRepository2.findById(id).get();
 
-        String imagesize=image.getDimensions();
+        String imagesize=image.getDimension();
         String []imagearr=imagesize.split("X");
         int ima1=Integer.parseInt(imagearr[0]);
         int ima2=Integer.parseInt(imagearr[1]);

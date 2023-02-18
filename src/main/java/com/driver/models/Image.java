@@ -12,7 +12,7 @@ public class Image {
 
     private String description;
 
-    private String dimensions;
+    private String dimension;
 
 
     @ManyToOne
@@ -40,12 +40,12 @@ public class Image {
         this.description = description;
     }
 
-    public String getDimensions() {
-        return dimensions;
+    public String getDimension() {
+        return dimension;
     }
 
-    public void setDimensions(String dimensions) {
-        this.dimensions = dimensions;
+    public void setDimension(String dimension) {
+        this.dimension = dimension;
     }
 
     public Blog getBlog() {
