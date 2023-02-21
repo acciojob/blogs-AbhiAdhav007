@@ -23,32 +23,27 @@ public class BlogService {
 
     public Blog createAndReturnBlog(Integer userId, String title, String content) {
         //create a blog at the current time
-        User user=userRepository1.findById(userId).get();
+        Blog blog = new Blog();
 
-        Blog newBlog=new Blog();
-        newBlog.setTitle(title);
-        newBlog.setContent(content);
+        User user = userRepository1.findById(userId).get();
 
-        // setting forigen key attribute;
+        blog.setPubDate(new Date());
+        blog.setUser(user);
+        blog.setTitle(title);
+        blog.setContent(content);
+        //blogRepository1.save(blog); // blog will be saved by cascading effect
 
-        List<Blog>prePostedBlog=user.getPostedBlogs();
-        prePostedBlog.add(newBlog);
-
-        user.setPostedBlogs(prePostedBlog);
-
-        newBlog.setUser(user);
-
+        List<Blog> blogList = user.getBlogList();
+        blogList.add(blog);
+        user.setBlogList(blogList);
         userRepository1.save(user);
-        return newBlog;
 
+        return blog;
     }
 
     public void deleteBlog(int blogId){
         //delete blog and corresponding images
 
-        Blog blog=blogRepository1.findById(blogId).get();
-
-        blogRepository1.delete(blog);
-
+        blogRepository1.deleteById(blogId);
     }
 }

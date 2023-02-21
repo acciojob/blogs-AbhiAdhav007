@@ -2,6 +2,7 @@ package com.driver.models;
 
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "blog_db")
+@Table(name = "blog")
 public class Blog {
 
     @Id
@@ -17,40 +18,24 @@ public class Blog {
     private int id;
 
     private String title;
+
     private String content;
+
     @CreationTimestamp
-    private Date postedDate;
+    private Date pubDate;
 
-    // blog is child for user  so i have to join the colum to user with there primary ky
+    // Blog is child w.r.t user
+    // Setting here the foreign key
     @ManyToOne
-    @JoinColumn
-    private User user;
-
-    // Blogs is parent for Image because i can post Blog without Image so that why;
-    @OneToMany
-    private List<Image>blogImages=new ArrayList<>();
+    @JoinColumn  // Adding foreign key
+    private User user; // Parent entity we are connecting with
 
 
-
+    @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL)
+    private List<Image> imageList = new ArrayList<>();
 
 
     public Blog() {
-    }
-
-    public List<Image> getBlogImages() {
-        return blogImages;
-    }
-
-    public void setBlogImages(List<Image> blogImages) {
-        this.blogImages = blogImages;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public int getId() {
@@ -77,11 +62,27 @@ public class Blog {
         this.content = content;
     }
 
-    public Date getPostedDate() {
-        return postedDate;
+    public User getUser() {
+        return user;
     }
 
-    public void setPostedDate(Date postedDate) {
-        this.postedDate = postedDate;
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public List<Image> getImageList() {
+        return imageList;
+    }
+
+    public void setImageList(List<Image> imageList) {
+        this.imageList = imageList;
+    }
+
+    public Date getPubDate() {
+        return pubDate;
+    }
+
+    public void setPubDate(Date pubDate) {
+        this.pubDate = pubDate;
     }
 }

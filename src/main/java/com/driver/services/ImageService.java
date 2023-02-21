@@ -15,63 +15,51 @@ public class ImageService {
     @Autowired
     ImageRepository imageRepository2;
 
-    public Image addImage(Integer blogId, String description, String dimensions){
+    public Image addImage(Integer blogId, String description, String dimensions) {
         //add an image to the blog
+        Image image = new Image();
 
-        Blog originalBlog=blogRepository2.findById(blogId).get();
+        image.setDescription(description);
+        image.setDimensions(dimensions);
 
-        Image newImage=new Image();
-        newImage.setDescription(description);
-        newImage.setDimension(description);
+        Blog blog = blogRepository2.findById(blogId).get();
 
+        image.setBlog(blog);
 
-        List<Image>updateImage=originalBlog.getBlogImages();
-        updateImage.add(newImage);
-        originalBlog.setBlogImages(updateImage);
+        List<Image> imageList = blog.getImageList();
+        imageList.add(image);
+        blog.setImageList(imageList);
 
-        newImage.setBlog(originalBlog);
-        blogRepository2.save(originalBlog);
+        blogRepository2.save(blog);
+        //imageRepository2.save(image);  // image will be saved by cascading effect
 
-        return newImage;
-
+        return image;
     }
 
     public void deleteImage(Integer id){
-        Image image=imageRepository2.findById(id).get();
 
-        List<Image>images=image.getBlog().getBlogImages();
-        for(Image image1:images){
-            if(image1.equals(image)){
-                images.remove(image);
-            }
-        }
-
-        imageRepository2.delete(image);
-
+        imageRepository2.deleteById(id);
     }
 
     public int countImagesInScreen(Integer id, String screenDimensions) {
         //Find the number of images of given dimensions that can fit in a screen having `screenDimensions`
 
+        Image image = imageRepository2.findById(id).get();
+        String dimension = image.getDimensions();
 
-        Image image=imageRepository2.findById(id).get();
-
-        String imagesize=image.getDimension();
-        String []imagearr=imagesize.split("X");
-        int ima1=Integer.parseInt(imagearr[0]);
-        int ima2=Integer.parseInt(imagearr[1]);
-
-        String []screenarr=screenDimensions.split("X");
-
-        int scr1=Integer.parseInt(screenarr[0]);
-        int scr2=Integer.parseInt(screenarr[1]);
+        String[] screenDimensionArray = screenDimensions.split("X");
+        String[] dimensionArray = dimension.split("X");
 
 
-        int scrmul=scr1*scr2;
-        int imamul=ima1*ima2;
-        return scrmul/imamul;
+        int l1 = Integer.valueOf(screenDimensionArray[0]);
+        int b1 = Integer.valueOf(screenDimensionArray[1]);
 
+        int l2 = Integer.valueOf(dimensionArray[0]);
+        int b2 = Integer.valueOf(dimensionArray[1]);
 
+        int l = l1 / l2;
+        int b = b1 / b2;
 
+        return l*b;
     }
 }

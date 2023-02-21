@@ -1,61 +1,30 @@
 package com.driver.models;
 
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "user_db")
+@Table(name = "user")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String userName;
-    private String passWord;
+    private String username;
+
+    private String password;
 
     private String firstName;
+
     private String lastName;
 
-    // mapping blog with user
-    // user is parent for blogs
-    // threr remation is one to many why?because user can post multipal blogs;
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
-    private List<Blog>postedBlogs=new ArrayList<>();
-
-
-
-
-
-
-
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Blog> blogList = new ArrayList<>();
 
     public User() {
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getPassWord() {
-        return passWord;
-    }
-
-    public void setPassWord(String passWord) {
-        this.passWord = passWord;
     }
 
     public String getFirstName() {
@@ -74,11 +43,36 @@ public class User {
         this.lastName = lastName;
     }
 
-    public List<Blog> getPostedBlogs() {
-        return postedBlogs;
+    public int getId() {
+        return id;
     }
 
-    public void setPostedBlogs(List<Blog> postedBlogs) {
-        this.postedBlogs = postedBlogs;
+    public void setId(int id) {
+        this.id = id;
     }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public List<Blog> getBlogList() {
+        return blogList;
+    }
+
+    public void setBlogList(List<Blog> blogList) {
+        this.blogList = blogList;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
 }
